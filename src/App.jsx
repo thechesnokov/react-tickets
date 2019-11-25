@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.scss';
 import axios from 'axios';
+import moment from 'moment';
 
 export default function App() {
 
@@ -10,14 +11,17 @@ export default function App() {
 
         axios.get('https://front-test.beta.aviasales.ru/search')
             .then(response => {
-                let searchId = response.data.searchId;
-
-                axios.get('https://front-test.beta.aviasales.ru/tickets/?searchId=' + searchId)
-                    .then((response => {
-                        let tickets = response.data.tickets;
-                        console.log(tickets);
-                        setTickets(tickets);
-                    }))
+                return response.data.searchId;
+            })
+            .then(searchId => {
+                return axios.get('https://front-test.beta.aviasales.ru/tickets/?searchId=' + searchId)
+            })
+            .then(response => {
+                console.log(response.data.tickets);
+                setTickets(response.data.tickets);
+            })
+            .catch(error => {
+                console.log(error);
             })
     });
 
@@ -41,6 +45,7 @@ export default function App() {
                                             <td>
                                                 <div>{item.origin} {item.destination}</div>
                                                 <div>{item.date}</div>
+                                                <div></div>
                                             </td>
                                             <td>
                                                 <div>в пути</div>
@@ -70,7 +75,7 @@ export default function App() {
                                                 item.stops.length === 2 ?
                                                     <td>
                                                         <div>2 пересадки</div>
-                                                        <div>{`${item.stops[0]} ${item.stops[1]}`}</div>
+                                                        <div>{`${item.stops.join(', ')}`}</div>
                                                     </td>
                                                     :
                                                     <td></td>
@@ -80,7 +85,7 @@ export default function App() {
                                                 item.stops.length === 3 ?
                                                     <td>
                                                         <div>3 пересадки</div>
-                                                        <div>{`${item.stops[0]} ${item.stops[1]} ${item.stops[2]}`}</div>
+                                                        <div>{`${item.stops.join(', ')}`}</div>
                                                     </td>
                                                     :
                                                     <td></td>
