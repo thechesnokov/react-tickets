@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.scss';
 import axios from 'axios';
 import moment from 'moment';
+import 'moment/locale/ru'
 
 export default function App() {
 
     const [tickets, setTickets] = useState([]);
 
-    useState(() => {
+    useEffect(() => {
 
         axios.get('https://front-test.beta.aviasales.ru/search')
             .then(response => {
@@ -17,13 +18,31 @@ export default function App() {
                 return axios.get('https://front-test.beta.aviasales.ru/tickets/?searchId=' + searchId)
             })
             .then(response => {
-                console.log(response.data.tickets);
                 setTickets(response.data.tickets);
             })
             .catch(error => {
                 console.log(error);
             })
-    });
+    }, []);
+
+    function getHoursFromDuration(duration) {
+        let hours = duration / 60 | 0,
+            minutes = duration % 60 | 0;
+
+        if (hours === 0) {
+            hours = ''
+        } else {
+            hours = `${hours}ч`
+        }
+
+        if (minutes === 0) {
+            minutes = ''
+        } else {
+            minutes = `${minutes}м`
+        }
+
+        return `${hours} ${minutes}`
+    }
 
     return (
         <div className="app">
@@ -44,12 +63,13 @@ export default function App() {
                                         <tr>
                                             <td>
                                                 <div>{item.origin} {item.destination}</div>
-                                                <div>{item.date}</div>
+                                                <div>{moment(item.date).format('LT')}</div>
                                                 <div></div>
                                             </td>
                                             <td>
                                                 <div>в пути</div>
-                                                <div>{item.duration}</div>
+                                                {console.log(item.duration)}
+                                                <div>{getHoursFromDuration(item.duration)}</div>
                                             </td>
                                             {
                                                 item.stops.length === 0 ?
