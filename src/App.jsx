@@ -45,10 +45,6 @@ export default function App() {
         return `${hours} ${minutes}`
     }
 
-    function getDestinationTime(start, duration) {
-        moment(start).add(duration, 'minutes').format('LT');
-    }
-
     return (
         <div className="app">
             <div className="app__container">
