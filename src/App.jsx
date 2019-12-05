@@ -18,6 +18,7 @@ export default function App() {
                 return axios.get('https://front-test.beta.aviasales.ru/tickets/?searchId=' + searchId)
             })
             .then(response => {
+                console.log(response.data.tickets);
                 setTickets(response.data.tickets);
             })
             .catch(error => {
@@ -44,6 +45,10 @@ export default function App() {
         return `${hours} ${minutes}`
     }
 
+    function getDestinationTime(start, duration) {
+        moment(start).add(duration, 'minutes').format('LT');
+    }
+
     return (
         <div className="app">
             <div className="app__container">
@@ -53,7 +58,7 @@ export default function App() {
                             <table>
                                 <tbody>
                                 <tr>
-                                    <td colSpan="2">{item.price}&nbsp;P</td>
+                                    <td colSpan="2">{item.price}&nbsp;&#8381;</td>
                                     <td>
                                         <img src={`//pics.avs.io/99/36/${item.carrier}.png`} alt="logo"/>
                                     </td>
@@ -62,13 +67,11 @@ export default function App() {
                                     item.segments.map(item =>
                                         <tr>
                                             <td>
-                                                <div>{item.origin} {item.destination}</div>
-                                                <div>{moment(item.date).format('LT')}</div>
-                                                <div></div>
+                                                <div>{item.origin} &ndash; {item.destination}</div>
+                                                <div>{moment(item.date).format('LT')} &ndash; {moment(item.date).add(item.duration, 'minutes').format('LT')}</div>
                                             </td>
                                             <td>
                                                 <div>в пути</div>
-                                                {console.log(item.duration)}
                                                 <div>{getHoursFromDuration(item.duration)}</div>
                                             </td>
                                             {
