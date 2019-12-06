@@ -2,3 +2,16 @@
   max-width: 754px;
   margin: 0 auto;
 }
+
+.app__container--flex {
+  display: flex;
+}
+
+.app__filters {
+  width: 232px;
+  margin-right: 20px;
+}
+
+.app__tickets {
+  flex-grow: 1;
+}
