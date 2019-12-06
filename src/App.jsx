@@ -3,6 +3,7 @@ import './App.scss';
 import 'moment/locale/ru'
 import Tickets from "./components/Tickets/Tickets";
 import Filters from "./components/Filters/Filters";
+import Modal from "./components/Modal/Modal";
 
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
                     <Tickets/>
                 </div>
             </div>
+            <Modal title={'Произошла ошибка'} content={'Попробуйте еще раз'}/>
         </div>
     )
 }
